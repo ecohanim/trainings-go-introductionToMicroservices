@@ -16,9 +16,9 @@ import (
 // test product with:
 // 	get    - "curl localhost:9090 | jq"
 // 	create - "curl -v localhost:9090 -d '{}' | jq"
-//			 "curl -v localhost:9090 -d '{"name": "tea", "description": "a nice cup of tea"}'"
-// 	update - "curl -v localhost:9090/1 -XPUT -d '{"name": "tea", "description": "a nice cup of tea"}'"
-// 	delete - "curl -v localhost:9090/1 -XDELETE | jq" (not implemented)
+//			 "curl -v localhost:9090 -X POST -d '{"name": "tea", "description": "a nice cup of tea"}'"
+// 	update - "curl -v localhost:9090/1 -X PUT -d '{"name": "tea", "description": "a nice cup of tea"}'"
+// 	delete - "curl -v localhost:9090/1 -X DELETE | jq" (not implemented)
 // debug product with "curl -v localhost:9090"
 func main() {
 	l := log.New(os.Stdout, "Debug: ", log.LstdFlags)

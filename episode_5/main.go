@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"./handlers"
+	"github.com/gorilla/mux"
 )
 
 // rest server app
@@ -16,9 +17,9 @@ import (
 // test product with:
 // 	get    - "curl localhost:9090 | jq"
 // 	create - "curl -v localhost:9090 -d '{}' | jq"
-//			 "curl -v localhost:9090 -d '{"name": "tea", "description": "a nice cup of tea"}'"
-// 	update - "curl -v localhost:9090/1 -XPUT -d '{"name": "tea", "description": "a nice cup of tea"}'"
-// 	delete - "curl -v localhost:9090/1 -XDELETE | jq" (not implemented)
+//			 "curl -v localhost:9090 -X POST-d '{"name": "tea", "description": "a nice cup of tea"}'"
+// 	update - "curl -v localhost:9090/1 -X PUT -d '{"name": "tea", "description": "a nice cup of tea"}'"
+// 	delete - "curl -v localhost:9090/1 -X DELETE | jq" (not implemented)
 // debug product with "curl -v localhost:9090"
 func main() {
 	l := log.New(os.Stdout, "Debug: ", log.LstdFlags)
@@ -27,8 +28,19 @@ func main() {
 	ph := handlers.NewProducts(l)
 
 	// create a new serve mux and register the handlers
-	sm := http.NewServeMux()
-	sm.Handle("/", ph)
+	sm := mux.NewRouter()
+
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/", ph.GetProducts)
+
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+	putRouter.Use(ph.MiddlewareProductValidation)
+
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.Use(ph.MiddlewareProductValidation)
+	// sm.Handle("/", ph)
 
 	// create a new server
 	s := &http.Server{
