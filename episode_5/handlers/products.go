@@ -47,9 +47,9 @@ func (p *Products) AddProduct(rw http.ResponseWriter, r *http.Request) {
 	// http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 	// }
 
-	prod := r.Context().Value(KeyProduct{}).(data.Product)
+	prod := r.Context().Value(KeyProduct{}).(*data.Product)
 	p.l.Printf("Prod: %#v", prod)
-	data.AddProduct(&prod)
+	data.AddProduct(prod)
 }
 
 func (p *Products) UpdateProduct(rw http.ResponseWriter, r *http.Request) {
