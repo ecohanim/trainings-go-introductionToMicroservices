@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"../data"
+	"github.com/data"
 )
 
 // Products is a http.handler
