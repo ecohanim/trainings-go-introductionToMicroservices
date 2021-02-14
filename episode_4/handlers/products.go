@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"../data"
+	"github.com/data"
 )
 
 // Products is a http.handler
@@ -119,6 +119,7 @@ func (p *Products) updateProduct(id int, rw http.ResponseWriter, r *http.Request
 			return
 		} else {
 			http.Error(rw, "Product not found", http.StatusInternalServerError)
+			return
 		}
 	}
 }
