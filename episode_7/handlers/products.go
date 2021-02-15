@@ -64,6 +64,8 @@ func NewProducts(l *log.Logger) *Products {
 func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle GET Products")
 
+	rw.Header().Add("Content-Type", "application/json")
+
 	// fetch the products from the data store
 	lp := data.GetProducts()
 
